@@ -70,6 +70,8 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: 'https://api.viridial.com',
       apiLoginEndpoint: '/api/v1/auth/login',
+      apiRegisterEndpoint: '/api/v1/auth/register',
+      apiRefreshEndpoint: '/api/v1/auth/refresh',
     },
   },
 

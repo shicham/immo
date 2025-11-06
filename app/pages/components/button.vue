@@ -42,7 +42,9 @@
         </CardHeader>
         <CardContent>
           <div class="h-100px w-full flex items-center justify-center gap-4 overflow-hidden sm:h-200px">
-            <Button variant="primary">Primary</Button>
+            <Button variant="primary">
+              Primary
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -1,15 +1,18 @@
+/**
+ * Authentication composable - wrapper around auth store
+ * @deprecated Use useAuthStore() directly instead
+ */
 export function useAuth() {
-  const token = ref(localStorage.getItem('accessToken') || null)
-  const user = ref(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null)
+  const authStore = useAuthStore()
 
-  function logout() {
-    token.value = null
-    user.value = null
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('user')
-    navigateTo('/login')
+  return {
+    token: computed(() => authStore.accessToken),
+    user: computed(() => authStore.user),
+    isAuthenticated: computed(() => authStore.isAuthenticated),
+    isLoading: computed(() => authStore.isLoading),
+    logout: () => authStore.logout(),
+    login: (email: string, password: string) => authStore.login(email, password),
+    register: (name: string, email: string, password: string, confirmPassword: string) =>
+      authStore.register(name, email, password, confirmPassword),
   }
-
-  return { token, user, logout }
 }

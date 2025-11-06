@@ -1,89 +1,82 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from '#app'
 import { Loader2 } from 'lucide-vue-next'
+import { ref } from 'vue'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 // state
 const email = ref('')
 const password = ref('')
-const isLoading = ref(false)
 const errorMessage = ref('')
-const router = useRouter()
 
-// runtime config
-const config = useRuntimeConfig()
-const API_URL = `${config.public.apiBaseUrl}${config.public.apiLoginEndpoint}`
+// Form validation
+const emailError = ref('')
+const passwordError = ref('')
 
-// simulate full login flow
+function validateEmail() {
+  const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
+  if (!email.value) {
+    emailError.value = 'L\'email est requis.'
+    return false
+  }
+  if (!emailRegex.test(email.value)) {
+    emailError.value = 'Email invalide.'
+    return false
+  }
+  emailError.value = ''
+  return true
+}
+
+function validatePassword() {
+  if (!password.value) {
+    passwordError.value = 'Le mot de passe est requis.'
+    return false
+  }
+  if (password.value.length < 6) {
+    passwordError.value = 'Le mot de passe doit contenir au moins 6 caractères.'
+    return false
+  }
+  passwordError.value = ''
+  return true
+}
+
 async function onSubmit(event: Event) {
   event.preventDefault()
   errorMessage.value = ''
+  emailError.value = ''
+  passwordError.value = ''
 
-  if (!email.value || !password.value) {
-    errorMessage.value = 'Veuillez entrer votre email et mot de passe.'
+  // Validate form
+  const isEmailValid = validateEmail()
+  const isPasswordValid = validatePassword()
+
+  if (!isEmailValid || !isPasswordValid) {
     return
   }
 
-  isLoading.value = true
+  const result = await authStore.login(email.value, password.value)
 
-  try {
-    const { data, error, status } = await useFetch(API_URL, {
-      method: 'POST',
-      body: { email: email.value, password: password.value },
-      headers: { 'Content-Type': 'application/json' }
-    })
-
-    if (error.value || !data.value) {
-      errorMessage.value =
-        error.value?.data?.message || 'Erreur de connexion au serveur.'
-      return
-    }
-
-    const response = data.value as {
-      success: boolean
-      message: string
-      data?: {
-        user: Record<string, any>
-        accessToken: string
-        refreshToken: string
-      }
-    }
-
-    // ✅ Cas KO
-    if (!response.success) {
-      errorMessage.value = response.message || 'Identifiants incorrects.'
-      return
-    }
-
-    // ✅ Cas OK
-    const tokens = response.data
-    if (tokens?.accessToken) {
-      // Stockage local sécurisé
-      localStorage.setItem('accessToken', tokens.accessToken)
-      localStorage.setItem('refreshToken', tokens.refreshToken)
-
-      // (Optionnel) Stocker les infos user
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-
-      // Redirection post-login
-      await router.push('/')
-    } else {
-      errorMessage.value = 'Réponse inattendue du serveur.'
-    }
-  } catch (err: any) {
-    errorMessage.value =
-      err.message || 'Une erreur est survenue. Veuillez réessayer.'
-  } finally {
-    isLoading.value = false
+  if (result.success) {
+    // Redirect to home page
+    await router.push('/')
+  }
+  else {
+    errorMessage.value = result.error || 'Erreur de connexion.'
   }
 }
 </script>
 
 <template>
-  <form class="grid gap-6" @submit="onSubmit" novalidate>
+  <form class="grid gap-6" novalidate @submit="onSubmit">
     <div class="flex flex-col gap-4">
-      <Button variant="outline" class="w-full gap-2">Login with Apple</Button>
-      <Button variant="outline" class="w-full gap-2">Login with Google</Button>
+      <Button variant="outline" class="w-full gap-2">
+        Login with Apple
+      </Button>
+      <Button variant="outline" class="w-full gap-2">
+        Login with Google
+      </Button>
     </div>
 
     <Separator label="Ou continuer avec" />
@@ -95,9 +88,13 @@ async function onSubmit(event: Event) {
         v-model="email"
         type="email"
         placeholder="name@example.com"
-        :disabled="isLoading"
+        :disabled="authStore.isLoading"
         autocomplete="email"
+        @blur="validateEmail"
       />
+      <p v-if="emailError" class="text-sm text-red-500">
+        {{ emailError }}
+      </p>
     </div>
 
     <div class="grid gap-2">
@@ -110,21 +107,33 @@ async function onSubmit(event: Event) {
           Mot de passe oublié ?
         </NuxtLink>
       </div>
-      <PasswordInput id="password" v-model="password" />
+      <PasswordInput
+        id="password"
+        v-model="password"
+        :disabled="authStore.isLoading"
+        @blur="validatePassword"
+      />
+      <p v-if="passwordError" class="text-sm text-red-500">
+        {{ passwordError }}
+      </p>
     </div>
 
-    <!-- message d'erreur -->
-    <p v-if="errorMessage" class="text-sm text-red-500">{{ errorMessage }}</p>
+    <!-- message d'erreur général -->
+    <p v-if="errorMessage" class="text-sm text-red-500">
+      {{ errorMessage }}
+    </p>
 
     <!-- bouton -->
-    <Button type="submit" class="w-full" :disabled="isLoading">
-      <Loader2 v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+    <Button type="submit" class="w-full" :disabled="authStore.isLoading">
+      <Loader2 v-if="authStore.isLoading" class="mr-2 h-4 w-4 animate-spin" />
       <span v-else>Se connecter</span>
     </Button>
   </form>
 
   <div class="mt-4 text-center text-sm text-muted-foreground">
     Pas encore de compte ?
-    <NuxtLink to="/register" class="underline">Inscrivez-vous</NuxtLink>
+    <NuxtLink to="/register" class="underline">
+      Inscrivez-vous
+    </NuxtLink>
   </div>
 </template>
