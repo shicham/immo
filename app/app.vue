@@ -23,7 +23,7 @@ useHead({
     class: computed(() => `color-${theme.value?.color || 'default'} theme-${theme.value?.type || 'default'}`),
   },
 })
-console.log(theme.value)
+
 const title = 'Nuxt Shadcn-Vue TailwindCSS 4 - Dashboard Template'
 const description = 'This dashboard, built with Nuxt, Shadcn Vue, and TailwindCSS. It includes a dark mode toggle and is optimized for performance and data efficiency.'
 
