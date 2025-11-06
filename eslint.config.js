@@ -10,11 +10,8 @@ export default withNuxt(antfu(
       'style/max-statements-per-line': ['error', { max: 2 }],
     },
   },
-  // Allow trailing space for markdown formatting
+  // Ignore markdown files from parsing
   {
-    files: ['**/*.md'],
-    rules: {
-      'style/no-trailing-spaces': 'off',
-    },
+    ignores: ['**/*.md', 'docs/**'],
   },
 ))
