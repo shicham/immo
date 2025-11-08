@@ -1,11 +1,6 @@
 export default defineNuxtRouteMiddleware((to, _from) => {
   const authStore = useAuthStore()
 
-  // Initialize auth state on first load
-  if (import.meta.client && !authStore.isAuthenticated) {
-    authStore.initializeAuth()
-  }
-
   // Public routes that don't require authentication
   const publicRoutes = [
     '/login',
