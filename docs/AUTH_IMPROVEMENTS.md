@@ -220,3 +220,11 @@ localStorage.setItem('locale', 'fr')
 
 Le support RTL pour l'arabe est automatique grâce au plugin `app/plugins/i18n-rtl.client.ts` qui surveille les changements de locale et ajuste la direction du document.
 
+### Note sur la configuration actuelle
+
+**État actuel**: Le module @nuxtjs/i18n v8.5.5 est configuré avec chargement runtime des messages via le plugin `app/plugins/i18n-messages.client.ts`. Les fichiers de traduction sont au format TypeScript dans `/locales` (en.ts, fr.ts, ar.ts) pour éviter les conflits avec le plugin JSON de Vite.
+
+**Problème connu**: Il existe une incompatibilité connue entre @intlify/unplugin-vue-i18n (utilisé par @nuxtjs/i18n v8) et Vite 7, qui peut causer des erreurs de build avec des fichiers JSON non-locale. La solution actuelle charge les messages à l'exécution via un plugin Nuxt.
+
+**Alternative future**: Une mise à niveau vers @nuxtjs/i18n v10+ ou v9 pourrait résoudre ce problème, mais nécessiterait des tests de compatibilité avec les autres dépendances du projet.
+
