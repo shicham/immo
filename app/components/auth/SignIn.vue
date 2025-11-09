@@ -2,9 +2,11 @@
 import { useRouter } from '#app'
 import { Loader2 } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const { t } = useI18n()
 
 // state
 const email = ref('')
@@ -18,11 +20,11 @@ const passwordError = ref('')
 function validateEmail() {
   const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
   if (!email.value) {
-    emailError.value = 'L\'email est requis.'
+    emailError.value = t('auth.validation.emailRequired')
     return false
   }
   if (!emailRegex.test(email.value)) {
-    emailError.value = 'Email invalide.'
+    emailError.value = t('auth.validation.emailInvalid')
     return false
   }
   emailError.value = ''
@@ -31,11 +33,11 @@ function validateEmail() {
 
 function validatePassword() {
   if (!password.value) {
-    passwordError.value = 'Le mot de passe est requis.'
+    passwordError.value = t('auth.validation.passwordRequired')
     return false
   }
   if (password.value.length < 6) {
-    passwordError.value = 'Le mot de passe doit contenir au moins 6 caractères.'
+    passwordError.value = t('auth.validation.passwordMinLength')
     return false
   }
   passwordError.value = ''
@@ -63,7 +65,7 @@ async function onSubmit(event: Event) {
     await router.push('/')
   }
   else {
-    errorMessage.value = result.error || 'Erreur de connexion.'
+    errorMessage.value = result.error || t('auth.errors.loginError')
   }
 }
 </script>
@@ -72,22 +74,22 @@ async function onSubmit(event: Event) {
   <form class="grid gap-6" novalidate @submit="onSubmit">
     <div class="flex flex-col gap-4">
       <Button variant="outline" class="w-full gap-2">
-        Login with Apple
+        {{ t('auth.buttons.loginWithApple') }}
       </Button>
       <Button variant="outline" class="w-full gap-2">
-        Login with Google
+        {{ t('auth.buttons.loginWithGoogle') }}
       </Button>
     </div>
 
-    <Separator label="Ou continuer avec" />
+    <Separator :label="t('auth.labels.or')" />
 
     <div class="grid gap-2">
-      <Label for="email">Email</Label>
+      <Label for="email">{{ t('auth.labels.email') }}</Label>
       <Input
         id="email"
         v-model="email"
         type="email"
-        placeholder="name@example.com"
+        :placeholder="t('auth.placeholders.email')"
         :disabled="authStore.isLoading"
         autocomplete="email"
         @blur="validateEmail"
@@ -99,12 +101,12 @@ async function onSubmit(event: Event) {
 
     <div class="grid gap-2">
       <div class="flex items-center justify-between">
-        <Label for="password">Mot de passe</Label>
+        <Label for="password">{{ t('auth.labels.password') }}</Label>
         <NuxtLink
           to="/forgot-password"
           class="text-sm underline text-muted-foreground"
         >
-          Mot de passe oublié ?
+          {{ t('auth.labels.forgotPassword') }}
         </NuxtLink>
       </div>
       <PasswordInput
@@ -126,14 +128,14 @@ async function onSubmit(event: Event) {
     <!-- bouton -->
     <Button type="submit" class="w-full" :disabled="authStore.isLoading">
       <Loader2 v-if="authStore.isLoading" class="mr-2 h-4 w-4 animate-spin" />
-      <span v-else>Se connecter</span>
+      <span v-else>{{ t('auth.buttons.signIn') }}</span>
     </Button>
   </form>
 
   <div class="mt-4 text-center text-sm text-muted-foreground">
-    Pas encore de compte ?
+    {{ t('auth.labels.noAccount') }}
     <NuxtLink to="/register" class="underline">
-      Inscrivez-vous
+      {{ t('auth.labels.signUp') }}
     </NuxtLink>
   </div>
 </template>
