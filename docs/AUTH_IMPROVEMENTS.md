@@ -147,6 +147,112 @@ definePageMeta({
 5. **Rate limiting**: Protection contre les attaques par force brute
 6. **Historique de connexion**: Traçabilité des connexions
 
+## Internationalisation (i18n)
+
+### Vue d'ensemble
+
+Le système d'authentification supporte maintenant trois langues: Anglais (en), Français (fr) et Arabe (ar) avec support RTL pour l'arabe.
+
+### Configuration
+
+#### Plugin i18n (`app/plugins/i18n.ts`)
+
+Le plugin i18n initialise vue-i18n avec:
+- **Détection automatique de la langue**: Vérifie localStorage puis la langue du navigateur
+- **Locale par défaut**: Anglais (en)
+- **Support RTL**: Change automatiquement `document.dir` pour l'arabe
+- **Trois langues**: en, fr, ar
+
+#### Fichiers de traduction (`locales/`)
+
+Les traductions sont organisées dans des fichiers JSON:
+- `locales/en.json` - Anglais
+- `locales/fr.json` - Français
+- `locales/ar.json` - Arabe
+
+Structure des clés:
+```json
+{
+  "auth": {
+    "labels": { ... },
+    "placeholders": { ... },
+    "buttons": { ... },
+    "validation": { ... },
+    "errors": { ... }
+  }
+}
+```
+
+### Utilisation
+
+#### Dans un composant Vue:
+```typescript
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
+
+// Utiliser une traduction
+const emailLabel = t('auth.labels.email')
+
+// Changer de langue
+locale.value = 'fr'
+localStorage.setItem('locale', 'fr')
+```
+
+#### Dans un store Pinia:
+```typescript
+const nuxtApp = useNuxtApp()
+const t = (nuxtApp as any).$t || ((k: string) => k)
+
+// Utiliser une traduction
+const errorMessage = t('auth.errors.serverError')
+```
+
+#### Composant de changement de langue
+
+Un composant `LocaleSwitcher.vue` est disponible pour changer facilement de langue:
+```vue
+<LocaleSwitcher />
+```
+
+### Changement de langue manuel
+
+Pour tester les différentes langues:
+
+```javascript
+// Dans la console du navigateur:
+
+// Changer en français
+localStorage.setItem('locale', 'fr')
+location.reload()
+
+// Changer en arabe (avec RTL)
+localStorage.setItem('locale', 'ar')
+location.reload()
+
+// Changer en anglais
+localStorage.setItem('locale', 'en')
+location.reload()
+```
+
+### Extension des traductions
+
+Pour ajouter de nouvelles traductions:
+
+1. Ajouter les clés dans les trois fichiers JSON (`en.json`, `fr.json`, `ar.json`)
+2. Utiliser `t('votre.nouvelle.cle')` dans vos composants
+3. Les traductions sont réactives et changent automatiquement
+
+### Caractéristiques
+
+✅ Détection automatique de la langue (localStorage ou navigateur)  
+✅ Support RTL pour l'arabe  
+✅ Fallback vers l'anglais pour les langues non supportées  
+✅ Toutes les chaînes d'authentification sont traduites  
+✅ Support dans les composants et les stores  
+✅ Changement de langue réactif  
+✅ Fonction $t disponible globalement dans l'application
+
 ## Tests
 
 Pour tester le système:
