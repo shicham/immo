@@ -43,6 +43,7 @@ export const useAuthStore = defineStore('auth', {
     async login(email: string, password: string) {
       this.isLoading = true
       const config = useRuntimeConfig()
+      const { $t } = useNuxtApp()
       const API_URL = `${config.public.apiBaseUrl}${config.public.apiLoginEndpoint}`
 
       try {
@@ -53,7 +54,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error.value || !data.value) {
-          throw new Error(error.value?.data?.message || 'Erreur de connexion au serveur.')
+          throw new Error(error.value?.data?.message || $t('auth.signIn.connectionError'))
         }
 
         const response = data.value as {
@@ -67,11 +68,11 @@ export const useAuthStore = defineStore('auth', {
         }
 
         if (!response.success) {
-          throw new Error(response.message || 'Identifiants incorrects.')
+          throw new Error(response.message || $t('auth.signIn.invalidCredentials'))
         }
 
         if (!response.data?.accessToken) {
-          throw new Error('Réponse inattendue du serveur.')
+          throw new Error($t('auth.signIn.serverError'))
         }
 
         // Update store state
@@ -90,7 +91,7 @@ export const useAuthStore = defineStore('auth', {
         return { success: true }
       }
       catch (err: any) {
-        return { success: false, error: err.message || 'Une erreur est survenue.' }
+        return { success: false, error: err.message || $t('auth.signIn.connectionError') }
       }
       finally {
         this.isLoading = false
@@ -100,26 +101,27 @@ export const useAuthStore = defineStore('auth', {
     async register(name: string, email: string, password: string, confirmPassword: string) {
       this.isLoading = true
       const config = useRuntimeConfig()
+      const { $t } = useNuxtApp()
       const API_URL = `${config.public.apiBaseUrl}/api/v1/auth/register`
 
       try {
         // Validation
         if (!name || !email || !password || !confirmPassword) {
-          throw new Error('Tous les champs sont requis.')
+          throw new Error($t('auth.signUp.allFieldsRequired'))
         }
 
         if (password !== confirmPassword) {
-          throw new Error('Les mots de passe ne correspondent pas.')
+          throw new Error($t('auth.signUp.passwordMismatch'))
         }
 
         if (password.length < 8) {
-          throw new Error('Le mot de passe doit contenir au moins 8 caractères.')
+          throw new Error($t('auth.signUp.passwordMinLength'))
         }
 
         // Password strength validation
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/
         if (!passwordRegex.test(password)) {
-          throw new Error('Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.')
+          throw new Error($t('auth.signUp.passwordWeak'))
         }
 
         const { data, error } = await useFetch(API_URL, {
@@ -129,7 +131,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error.value || !data.value) {
-          throw new Error(error.value?.data?.message || 'Erreur lors de l\'inscription.')
+          throw new Error(error.value?.data?.message || $t('auth.signUp.registrationError'))
         }
 
         const response = data.value as {
@@ -143,7 +145,7 @@ export const useAuthStore = defineStore('auth', {
         }
 
         if (!response.success) {
-          throw new Error(response.message || 'Erreur lors de l\'inscription.')
+          throw new Error(response.message || $t('auth.signUp.registrationError'))
         }
 
         if (response.data?.accessToken) {
@@ -163,7 +165,7 @@ export const useAuthStore = defineStore('auth', {
         return { success: true, message: response.message }
       }
       catch (err: any) {
-        return { success: false, error: err.message || 'Une erreur est survenue.' }
+        return { success: false, error: err.message || $t('auth.signUp.registrationError') }
       }
       finally {
         this.isLoading = false

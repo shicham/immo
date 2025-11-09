@@ -164,3 +164,59 @@ Pour tester le système:
 ## Support
 
 Pour toute question ou problème, consulter la documentation Nuxt 3 et Pinia.
+
+## Internationalization (i18n)
+
+Ce projet utilise le module `@nuxtjs/i18n` pour la gestion multilingue de l'application.
+
+### Configuration
+
+Le module est configuré dans `nuxt.config.ts` avec les locales suivantes :
+- **Anglais (en)** - langue par défaut
+- **Français (fr)**
+- **Arabe (ar)** - avec support RTL automatique
+
+### Fichiers de traduction
+
+Les traductions sont stockées dans le répertoire `/locales` :
+- `locales/en.json` - Traductions anglaises
+- `locales/fr.json` - Traductions françaises
+- `locales/ar.json` - Traductions arabes
+
+### Structure des traductions
+
+Les traductions sont organisées par namespace :
+```json
+{
+  "auth": {
+    "signIn": { ... },
+    "signUp": { ... }
+  },
+  "common": { ... }
+}
+```
+
+### Ajouter de nouvelles traductions
+
+1. Ouvrir les trois fichiers de locale dans `/locales`
+2. Ajouter la nouvelle clé de traduction dans la même structure dans chaque fichier
+3. Utiliser dans le code avec `$t('cle.de.traduction')` ou `t('cle.de.traduction')` après avoir appelé `useI18n()`
+
+### Changer de langue
+
+La langue peut être changée en utilisant :
+```javascript
+const { locale } = useI18n()
+locale.value = 'fr' // ou 'en' ou 'ar'
+```
+
+Ou via localStorage pour persister la préférence :
+```javascript
+localStorage.setItem('locale', 'fr')
+// Puis recharger la page
+```
+
+### Support RTL
+
+Le support RTL pour l'arabe est automatique grâce au plugin `app/plugins/i18n-rtl.client.ts` qui surveille les changements de locale et ajuste la direction du document.
+
