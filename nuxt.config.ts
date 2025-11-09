@@ -8,6 +8,14 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    optimizeDeps: {
+      exclude: ['@number-flow/vue'],
+    },
+    build: {
+      rollupOptions: {
+        external: [],
+      },
+    },
   },
 
   hooks: {},
