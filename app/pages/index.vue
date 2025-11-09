@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NumberFlow from '@number-flow/vue'
+// import NumberFlow from '@number-flow/vue'
 import { TrendingDown, TrendingUp, TrendingUpIcon } from 'lucide-vue-next'
 
 const dataCard = ref({
@@ -38,7 +38,7 @@ watch(isDesktop, () => {
         Dashboard
       </h2>
       <div class="flex items-center space-x-2">
-        <BaseDateRangePicker />
+        <BaseDateRangePicker /> -->
         <Button>Download</Button>
       </div>
     </div>
@@ -48,14 +48,11 @@ watch(isDesktop, () => {
           <CardHeader>
             <CardDescription>Total Revenue</CardDescription>
             <CardTitle class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              <NumberFlow
-                :value="dataCard.totalRevenue"
-                :format="{ style: 'currency', currency: 'USD', trailingZeroDisplay: 'stripIfInteger' }"
-              />
+              ${{ dataCard.totalRevenue.toFixed(2) }}
             </CardTitle>
             <CardAction>
               <Badge variant="outline">
-                <TrendingUpIcon />
+                <TrendingUpIcon /> -->
                 +12.5%
               </Badge>
             </CardAction>
@@ -73,9 +70,7 @@ watch(isDesktop, () => {
           <CardHeader>
             <CardDescription>New Customers</CardDescription>
             <CardTitle class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              <NumberFlow
-                :value="dataCard.newCustomers"
-              />
+              {{ dataCard.newCustomers }}
             </CardTitle>
             <CardAction>
               <Badge variant="outline">
@@ -86,7 +81,7 @@ watch(isDesktop, () => {
           </CardHeader>
           <CardFooter class="flex-col items-start gap-1.5 text-sm">
             <div class="line-clamp-1 flex gap-2 font-medium">
-              Down 20% this period <TrendingDown class="size-4" />
+              Down 20% this period <TrendingDown class="size-4" /> -->
             </div>
             <div class="text-muted-foreground">
               Acquisition needs attention
@@ -97,9 +92,7 @@ watch(isDesktop, () => {
           <CardHeader>
             <CardDescription>Active Accounts</CardDescription>
             <CardTitle class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              <NumberFlow
-                :value="dataCard.activeAccount"
-              />
+              {{ dataCard.activeAccount }}
             </CardTitle>
             <CardAction>
               <Badge variant="outline">
@@ -121,10 +114,7 @@ watch(isDesktop, () => {
           <CardHeader>
             <CardDescription>Growth Rate</CardDescription>
             <CardTitle class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              <NumberFlow
-                :value="dataCard.growthRate"
-                suffix="%"
-              />
+              {{ dataCard.growthRate }}%
             </CardTitle>
             <CardAction>
               <Badge variant="outline">
@@ -175,7 +165,7 @@ watch(isDesktop, () => {
                 size="sm"
                 aria-label="Select a value"
               >
-                <SelectValue placeholder="Last 3 months" />
+                <SelectValue placeholder="Last 3 months" /> -->
               </SelectTrigger>
               <SelectContent class="rounded-xl">
                 <SelectItem value="90d" class="rounded-lg">
@@ -192,7 +182,7 @@ watch(isDesktop, () => {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <DashboardTotalVisitors :time-range="timeRange" />
+          <DashboardTotalVisitors :time-range="timeRange" /> -->
         </CardContent>
       </Card>
     </main>
