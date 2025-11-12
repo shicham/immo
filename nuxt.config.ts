@@ -8,7 +8,17 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    optimizeDeps: {
+      exclude: ['@number-flow/vue'],
+    },
+    build: {
+      rollupOptions: {
+        external: [],
+      },
+    },
   },
+
+  hooks: {},
 
   components: [
     {
@@ -25,7 +35,26 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/fonts',
+    '@nuxtjs/i18n',
   ],
+
+  i18n: {
+    locales: [
+      { code: 'en', name: 'English' },
+      { code: 'fr', name: 'Français' },
+      { code: 'ar', name: 'العربية' },
+    ],
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+      alwaysRedirect: false,
+      fallbackLocale: 'en',
+    },
+    vueI18n: './i18n.config.ts',
+  },
 
   shadcn: {
     /**

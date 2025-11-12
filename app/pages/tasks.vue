@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { columns } from '@/components/tasks/components/columns'
 import DataTable from '@/components/tasks/components/DataTable.vue'
-import tasks from '@/components/tasks/data/tasks.json'
+import tasksRaw from '@/components/tasks/data/tasks.json?raw'
+
+const tasks = JSON.parse(tasksRaw)
 </script>
 
 <template>

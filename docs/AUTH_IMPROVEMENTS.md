@@ -164,3 +164,67 @@ Pour tester le système:
 ## Support
 
 Pour toute question ou problème, consulter la documentation Nuxt 3 et Pinia.
+
+## Internationalization (i18n)
+
+Ce projet utilise le module `@nuxtjs/i18n` pour la gestion multilingue de l'application.
+
+### Configuration
+
+Le module est configuré dans `nuxt.config.ts` avec les locales suivantes :
+- **Anglais (en)** - langue par défaut
+- **Français (fr)**
+- **Arabe (ar)** - avec support RTL automatique
+
+### Fichiers de traduction
+
+Les traductions sont stockées dans le répertoire `/locales` :
+- `locales/en.json` - Traductions anglaises
+- `locales/fr.json` - Traductions françaises
+- `locales/ar.json` - Traductions arabes
+
+### Structure des traductions
+
+Les traductions sont organisées par namespace :
+```json
+{
+  "auth": {
+    "signIn": { ... },
+    "signUp": { ... }
+  },
+  "common": { ... }
+}
+```
+
+### Ajouter de nouvelles traductions
+
+1. Ouvrir les trois fichiers de locale dans `/locales`
+2. Ajouter la nouvelle clé de traduction dans la même structure dans chaque fichier
+3. Utiliser dans le code avec `$t('cle.de.traduction')` ou `t('cle.de.traduction')` après avoir appelé `useI18n()`
+
+### Changer de langue
+
+La langue peut être changée en utilisant :
+```javascript
+const { locale } = useI18n()
+locale.value = 'fr' // ou 'en' ou 'ar'
+```
+
+Ou via localStorage pour persister la préférence :
+```javascript
+localStorage.setItem('locale', 'fr')
+// Puis recharger la page
+```
+
+### Support RTL
+
+Le support RTL pour l'arabe est automatique grâce au plugin `app/plugins/i18n-rtl.client.ts` qui surveille les changements de locale et ajuste la direction du document.
+
+### Note sur la configuration actuelle
+
+**État actuel**: Le module @nuxtjs/i18n v8.5.5 est configuré avec chargement runtime des messages via le plugin `app/plugins/i18n-messages.client.ts`. Les fichiers de traduction sont au format TypeScript dans `/locales` (en.ts, fr.ts, ar.ts) pour éviter les conflits avec le plugin JSON de Vite.
+
+**Problème connu**: Il existe une incompatibilité connue entre @intlify/unplugin-vue-i18n (utilisé par @nuxtjs/i18n v8) et Vite 7, qui peut causer des erreurs de build avec des fichiers JSON non-locale. La solution actuelle charge les messages à l'exécution via un plugin Nuxt.
+
+**Alternative future**: Une mise à niveau vers @nuxtjs/i18n v10+ ou v9 pourrait résoudre ce problème, mais nécessiterait des tests de compatibilité avec les autres dépendances du projet.
+
