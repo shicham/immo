@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "labels": {
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "signIn": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "signUp": "سجل الآن",
+      "or": "أو تابع مع"
+    },
+    "placeholders": {
+      "email": "name@example.com"
+    },
+    "buttons": {
+      "signIn": "تسجيل الدخول",
+      "loginWithApple": "تسجيل الدخول مع Apple",
+      "loginWithGoogle": "تسجيل الدخول مع Google"
+    },
+    "validation": {
+      "emailRequired": "البريد الإلكتروني مطلوب.",
+      "emailInvalid": "البريد الإلكتروني غير صالح.",
+      "passwordRequired": "كلمة المرور مطلوبة.",
+      "passwordMinLength": "يجب أن تحتوي كلمة المرور على 6 أحرف على الأقل.",
+      "passwordMinLength8": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل.",
+      "allFieldsRequired": "جميع الحقول مطلوبة.",
+      "passwordsNoMatch": "كلمات المرور غير متطابقة.",
+      "passwordStrength": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، وحرف صغير، ورقم، وحرف خاص."
+    },
+    "errors": {
+      "loginError": "خطأ في تسجيل الدخول.",
+      "serverError": "خطأ في الاتصال بالخادم.",
+      "invalidCredentials": "بيانات الاعتماد غير صحيحة.",
+      "unexpectedResponse": "استجابة غير متوقعة من الخادم.",
+      "registrationError": "خطأ في التسجيل.",
+      "genericError": "حدث خطأ."
+    }
+  }
+}

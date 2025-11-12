@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "labels": {
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign in",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "or": "Or continue with"
+    },
+    "placeholders": {
+      "email": "name@example.com"
+    },
+    "buttons": {
+      "signIn": "Sign in",
+      "loginWithApple": "Login with Apple",
+      "loginWithGoogle": "Login with Google"
+    },
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Invalid email.",
+      "passwordRequired": "Password is required.",
+      "passwordMinLength": "Password must be at least 6 characters.",
+      "passwordMinLength8": "Password must be at least 8 characters.",
+      "allFieldsRequired": "All fields are required.",
+      "passwordsNoMatch": "Passwords do not match.",
+      "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character."
+    },
+    "errors": {
+      "loginError": "Login error.",
+      "serverError": "Server connection error.",
+      "invalidCredentials": "Invalid credentials.",
+      "unexpectedResponse": "Unexpected server response.",
+      "registrationError": "Registration error.",
+      "genericError": "An error occurred."
+    }
+  }
+}
